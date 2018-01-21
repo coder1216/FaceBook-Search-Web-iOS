@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <!-- Latest compiled and minified CSS -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <link rel="stylesheet" href="index.css">
+        
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script> 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.min.js"></script> 
+      
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/additional-methods.min.js"></script>
+    
+	<script src='http://connect.facebook.net/en_US/all.js'></script>
+
+        <title>FB Search</title>
+    </head>
+        <body ng-app = "app">
+            
+            
+    
+            
+        <div class="nav navbar-default navbar-static-top" style="margin-bottom:0px;">
+          <div class="container-fluid">
+            <div class="navbar-header" style="margin-right:180px">
+              <p class="navbar-brand" style="color:rgb(51,122,183);">FB Search</p>
+            </div>
+            <form class="navbar-form navbar-left" method="get" id="searchForm">
+              <div class="input-group">
+                <input id="searchData" type="text" size='60' class="form-control" placeholder="type something..." name="keyword" value= "" pattern="^(?!\d).+$" required>
+                
+                <div class="input-group-btn">
+                    
+                <button id="searchButton" class="btn btn-primary" type="submit" style="margin-right:20px"><span class="glyphicon glyphicon-search" style="padding-left:20px;padding-right:20px;" ></span></button>
+                    
+                <button type="button" id="clean" class="btn btn-default" onclick="">Clear</button>
+                </div> 
+                  
+              </div>
+            </form>
+              
+          </div>
+        </div>
+            
+            
+            
+        
+        <div>
+            
+            <ul class="nav navbar-static-top" role="tablist" id="myTabs">
+    
+                    <li role="presentation ">
+                        <a class="col-md-2 btn-primary active" href="#user" style="text-align:center" aria-controls="user" data-toggle="tab" data-target="#user" role="tab" id="user_s" >Users</a>
+                    </li>
+                    <li role="presentation">
+                        <a class="col-md-2 btn-primary" href="#page" style="text-align:center" aria-controls="page" data-toggle="tab" data-target="#page" role="tab" id="page_s">Pages </a>
+                    </li>
+                    <li role="presentation">
+                        <a class="col-md-2 btn-primary" href="#event" style="text-align:center" aria-controls="event" data-toggle="tab" role="tab" id="event_s">Events </a>
+                    </li>
+                    <li role="presentation">
+                        <a class="col-md-2 btn-primary" href="#place" style="text-align:center" aria-controls="palce" data-toggle="tab" role="tab" id="place_s">Places </a>
+                    </li>
+                    <li role="presentation">
+                        <a class="col-md-2 btn-primary" href="#group" style="text-align:center" aria-controls="group" data-toggle="tab" role="tab" id="group_s">Groups </a>
+                    </li>
+                    <li role="presentation">
+                        <a class="col-md-2 btn-primary" href="#favorite" style="text-align:center" aria-controls="favorite" data-toggle="tab" role="tab" id="favorite_s">Favorites </a>
+                    </li>
+                    
+            </ul>
+            
+            
+           <hr>
+            
+
+<div class="container" style="width:95%" ng-controller="myController"> 
+    <div class="table-responsive tab-content" id="result"> 
+                           
+<!--user section-->        
+    <div class="tab-pane active" id="user">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div  class="carousel-inner" role="listbox">
+                <div class="item active">    
+                    <table class=" table table-hover col-md-12 table-borderless">
+                            <tr>
+                                <th class="col-md-1">#</th>
+                                <th class="col-md-2">Profile Photo</th>
+                                <th class="col-md-4">Name</th>
+                                <th class="col-md-2">Favorite</th>
+                                <th class="col-md-1">Details</th>
+                            </tr>
+                            <tr role="tabpanel active" class="tab-pane" ng-repeat="x in rows track by $index" ng-show="x.picture.data.url">
+                                <td>{{$index + 1}}</td>
+                                <td><a href="{{x.picture.data.url}}"><img class="img-circle" style="length:40px; width:40px" src="{{x.picture.data.url}}"></a></td>
+                                <td>{{x.name}}</td>
+                                <td>
+                                    <button class="btn btn-default" type="submit" ng-click="change(x,'user')">
+                                    <span class="glyphicon glyphicon-star" ng-show="x.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!x.favorite"></span>
+                                    </button>
+                                </td>
+                                <td class="slide" ng-click="user_details(x)">
+                                    <button class="btn btn-default" data-target="#myCarousel" data-slide-to="1">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>     
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                                    <br>
+                                    <br>
+                                    <br>
+                                <div class="container" style="text-align:center">
+                                    <a class="btn btn-default center" type="submit" ng-click="users_prev()" ng-show="use.paging.previous">Previous</a>
+                                    <a class="btn btn-default center" type="submit" ng-click="users_next()" ng-show="use.paging.next">Next</a> 
+                                </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                    </div>
+                            
+                            
+                        <div class="item">
+                              <div class="nav navbar">
+                                    <a class="btn btn-default pull-left" type="submit" data-target="#myCarousel" data-slide-to="0" >Previous</a>
+                                    <a class="btn btn-default pull-right" type="submit" ng-click="postStory(all)"><img src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png" style="width:20px;height:20px"></a>
+
+                                    <button class="btn btn-default pull-right" type="submit" ng-click="change(all,'user') ">
+                                    <span class="glyphicon glyphicon-star" ng-show="all.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!all.favorite"></span>
+                                    </button>
+                                    
+                                </div>
+
+                                    <div class="container" role="details">
+                                        <div class="well well-sm col-md-5" style="margin-right:5%; background-color:white">
+                                            <div class="well well-sm" id="abl">
+                                                <p> Albums </p>
+                                            </div>
+                                                <div class="progress" id="progressleft">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                        
+                                            <div class="well well-sm" ng-repeat="x in albums track by $index">
+                                                <a ng-click="toggleAlbums(albums,$index)">{{x.name}}</a>
+                                                <div ng-show="x.pic">
+                                                    <img src="{{x.photos.data[0].picture}}">
+                                                    <img src="{{x.photos.data[1].picture}}">
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-warning" ng-show="albums.length==0 || !albums" id="userContent1">
+                                                <p>No data found.</p>  
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                    <div class=" well well-sm col-md-5" style="background-color:white">
+                                            <div class="well well-sm" id="pst">
+                                            <p> Posts </p>
+                                            </div>
+                                                <div class="progress" id="progressright">
+                                                    <div class="progress-bar progress-bar-striped active " role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                        
+                                            <div class="well" style="background-color:white" ng-repeat="y in posts2">
+                                                <div>{{all2.name}}</div>
+                                                <div>{{y.created_time | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                                                <div><img class="responsive" src="{{all2.picture.data.url}}" style="width:20px;length:20px"></div>
+                                                <p>{{y.message}}</p>
+                                            </div>
+                                        
+                                            <div class="alert alert-warning" ng-show="posts2.length==0 || !posts2" id="userContent2">
+                                                <p>No data found.</p>
+                                            </div>
+                                        
+                                       
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                
+    
+<!--page section 1 -->                
+    <div class="tab-pane" id="page" >
+        <div id="myCarousel1" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div  class="carousel-inner" role="listbox">
+                <div class="item active">  
+                    <table class=" table table-hover col-md-12 table-borderless">
+                        <tr>
+                            <th class="col-md-1">#</th>
+                            <th class="col-md-2">Profile Photo</th>
+                            <th class="col-md-4">Name</th>
+                            <th class="col-md-2">Favorite</th>
+                            <th class="col-md-1">Details</th>
+                        </tr>
+                        <tr role="tabpanel" class="tab-pane" ng-repeat="x in rows1 track by $index" ng-show="x.picture.data.url">
+                            <td>{{$index + 1}}</td>
+                            <td><a href="{{x.picture.data.url}}"><img class="img-circle" style="length:40px; width:40px" src="{{x.picture.data.url}}"></a></td>
+                            <td>{{x.name}}</td>
+                            <td><button class="btn btn-default" type="submit" ng-click="change(x,'page')">
+                                      <span class="glyphicon glyphicon-star" ng-show="x.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!x.favorite"></span>
+                                </button>
+                            </td>
+                            <td class="slide" ng-click="page_details(x)">
+                                <button class="btn btn-default" data-target="#myCarousel1" data-slide-to="1">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                                <br>
+                                <br>
+                                <br>
+                            <div class="container" style="text-align:center">
+                                <a class="btn btn-default center" type="submit" ng-click="pages_prev()" ng-show="use1.paging.previous" >Previous</a>
+                                <a class="btn btn-default center" type="submit" ng-click="pages_next()" ng-show="use1.paging.next">Next</a>
+                            </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                        </div>
+
+
+                        <div class="item">
+                              <div class="nav navbar">
+                                    <a class="btn btn-default pull-left" type="submit" data-target="#myCarousel1" data-slide-to="0"  >Previous</a>
+                                    <a class="btn btn-default pull-right" type="submit" ng-click="postStory(all1)"><img src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png" style="width:20px;height:20px"></a>
+
+                                    <button class="btn btn-default pull-right" type="submit" ng-click="change(all1,'page') ">
+                                    <span class="glyphicon glyphicon-star" ng-show="all1.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!all1.favorite"></span>
+                                    </button>
+                                  
+                                </div>
+
+                                    <div class="container" role="details">
+                                        <div class="well well-sm col-md-5" style="margin-right:5%; background-color:white" >
+                                            <div div class="well well-sm" id="abl1" >
+                                                <p> Albums </p>
+                                            </div> 
+                                            <div class="progress" id="progressleft1">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                        <div id="pageContent1">
+                                            <div class="well well-sm" ng-repeat="x in albums1 track by $index" >
+                                                <a ng-click="toggleAlbums(albums1,$index)">{{x.name}}</a>
+                                                <div ng-show="x.pic">
+                                                    <img src="{{x.photos.data[0].picture}}" style="width:250px;heigth:250px">
+                                                    <img src="{{x.photos.data[1].picture}}" style="width:250px;heigth:250px">
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="alert alert-warning" ng-show="albums1.length==0 || !albums1" >
+                                                <p>No data found.</p>  
+                                            </div>
+                                           
+                                            
+                                        </div>
+
+                                        <div class=" well well-sm col-md-5" style="background-color:white">
+                                            <div class="well well-sm" id ="pst1">
+                                            <p> Posts </p>
+                                            </div>
+                                                <div class="progress" id="progressright1">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                            <div id="pageContent2">
+                                            <div class="well" style="background-color:white" ng-repeat="y in posts1">
+                                                <div><img class="responsive" src="{{all1.picture.data.url}}" style="width:40px;heigth:40px;float:left"></div>
+                                                <div style="font-size:12px; font-weight:bold;">{{all1.name}}</div>
+                                                <div style="font-size:10px;">{{y.created_time | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                                                <p>{{y.message}}</p>
+                                            </div>
+                                            </div>
+                                            <div class="alert alert-warning" ng-show="posts1.length==0 || !posts1">
+                                                <p>No data found.</p>
+                                            </div>
+                                            
+                                        </div>   
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+            </div>
+
+            
+  
+            
+                    
+<!--event section 2 -->                
+                            
+    <div class="tab-pane" id="event" >
+        <div id="myCarousel2" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div  class="carousel-inner" role="listbox">
+                <div class="item active">
+                        <table class="table table-hover col-md-12 table-borderless">
+                             <tr>
+                                <th class="col-md-1">#</th>
+                                <th class="col-md-2">Profile Photo</th>
+                                <th class="col-md-4">Name</th>
+                                <th class="col-md-2">Favorite</th>
+                                <th class="col-md-1">Details</th>
+
+                            </tr>
+                            <tr role="tabpanel" class="tab-pane" ng-repeat="x in rows2 track by $index" ng-show="x.picture.data.url">
+                                <td>{{$index + 1}}</td>
+                                <td><a href="{{x.picture.data.url}}"><img class="img-circle" style="length:40px; width:40px" src="{{x.picture.data.url}}"></a></td>
+                                <td>{{x.name}}</td>
+                                <td><button class="btn btn-default" type="submit" ng-click="change(x,'event')">
+                                      <span class="glyphicon glyphicon-star" ng-show="x.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!x.favorite"></span>
+                                    </button>
+                                </td>
+                                <td class="slide" ng-click="event_details(x)">
+                                    <button class="btn btn-default" data-target="#myCarousel2" data-slide-to="1">
+                                        <span class="glyphicon glyphicon-chevron-right" ></span>
+                                    </button>
+                                </td>
+                            </tr>
+                         </table>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div class="container" style="text-align:center">
+                                        <a class="btn btn-default center" type="submit" ng-click="events_prev()" ng-show="use2.paging.previous">Previous</a>
+                                        <a class="btn btn-default center" type="submit" ng-click="events_next()" ng-show="use2.paging.next">Next</a>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                        </div>
+                        
+                        <div class="item">
+                              <div class="nav navbar">
+                                    <a class="btn btn-default pull-left" type="submit" data-target="#myCarousel2" data-slide-to="0"  >Previous</a>
+                                    <a class="btn btn-default pull-right" type="submit" ng-click="postStory(all2)"><img src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png" style="width:20px;height:20px"></a>
+
+                                    <button class="btn btn-default pull-right" type="submit" ng-click="change(all2,'event')">
+                                    <span class="glyphicon glyphicon-star" ng-show="all2.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!all2.favorite"></span>
+                                    </button>
+                                </div>
+
+                                    <div class="container" role="details">
+                                        <div class="well well-sm col-md-5" style="margin-right:5%; background-color:white" >
+                                            <div div class="well well-sm" id="abl2" >
+                                                <p> Albums </p>
+                                            </div> 
+                                            <div class="progress" id="progressleft2">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                        <div id="eventContent1">
+                                            <div class="well well-sm" ng-repeat="x in albums2 track by $index" >
+                                                <a ng-click="toggleAlbums(albums2,$index)">{{x.name}}</a>
+                                                <div ng-show="x.pic">
+                                                    <img src="{{x.photos.data[0].picture}}" style="width:250px;heigth:250px">
+                                                    <img src="{{x.photos.data[1].picture}}" style="width:250px;heigth:250px">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning" ng-show="albums2.length==0 || !albums2" >
+                                                <p>No data found.</p>  
+                                            </div>
+                                           </div>
+                                            
+                                        </div>
+
+                                        <div class=" well well-sm col-md-5" style="background-color:white">
+                                            <div class="well well-sm" id ="pst2">
+                                            <p> Posts </p>
+                                            </div>
+                                                <div class="progress" id="progressright2">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                            <div id="eventContent2">
+                                            <div class="well" style="background-color:white" ng-repeat="y in posts2">
+                                                <div><img class="responsive" src="{{all2.picture.data.url}}" style="width:40px;heigth:40px;float:left"></div>
+                                                <div style="font-size:12px; font-weight:bold;">{{all2.name}}</div>
+                                                <div style="font-size:10px;">{{y.created_time | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                                                <p>{{y.message}}</p>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning" ng-show="posts2.length==0 || !posts2">
+                                                <p>No data found.</p>
+                                            </div>
+                                            </div>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                            
+<!--place section 3 -->                    
+    <div class="tab-pane" id="place" >
+        <div id="myCarousel3" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div  class="carousel-inner" role="listbox">
+                <div class="item active"> 
+                        <table class="table table-hover col-md-12 table-borderless">
+                             <tr>
+                                <th class="col-md-1">#</th>
+                                <th class="col-md-2">Profile Photo</th>
+                                <th class="col-md-4">Name</th>
+                                <th class="col-md-2">Favorite</th>
+                                <th class="col-md-1">Details</th>
+
+                            </tr>
+                            <tr role="tabpanel" class="tab-pane" ng-repeat="x in rows3 track by $index" ng-show="x.picture.data.url">
+                                <td>{{$index + 1}}</td>
+                                <td><a href="{{x.picture.data.url}}"><img class="img-circle" style="length:40px; width:40px" src="{{x.picture.data.url}}"></a></td>
+                                <td>{{x.name}}</td>
+                                <td>
+                                    <button class="btn btn-default" type="submit" ng-click="change(x,'place')">
+                                      <span class="glyphicon glyphicon-star" ng-show="x.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!x.favorite"></span>
+                                    </button>
+                                </td>
+                                <td class="slide" ng-click="place_details(x)">
+                                    <button class="btn btn-default" data-target="#myCarousel3" data-slide-to="1">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div class="container" style="text-align:center">
+                                        <a class="btn btn-default center" type="submit" ng-click="places_prev()" ng-show="use3.paging.previous">Previous</a>
+                                        <a class="btn btn-default center" type="submit" ng-click="places_next()" ng-show="use3.paging.next">Next</a>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    </div>
+                        </div>
+                
+                        <div class="item">
+                            
+                              <div class="nav navbar">
+                                    <a class="btn btn-default pull-left" type="submit" data-target="#myCarousel3" data-slide-to="0"  >Previous</a>
+                                    <a class="btn btn-default pull-right" type="submit" ng-click="postStory(all3)"><img src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png" style="width:20px;height:20px"></a>
+
+                                    <button class="btn btn-default pull-right" type="submit" ng-click="change(all3,'place') ">
+                                    <span class="glyphicon glyphicon-star" ng-show="all3.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!all3.favorite"></span>
+                                    </button>
+                                </div>
+
+                                    <div class="container" role="details">
+                                        <div class="well well-sm col-md-5" style="margin-right:5%; background-color:white" >
+                                            <div div class="well well-sm" id="abl3" >
+                                                <p> Albums </p>
+                                            </div> 
+                                            <div class="progress" id="progressleft3">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                        <div id="placeContent1">
+                                            <div class="well well-sm" ng-repeat="x in albums3 track by $index" >
+                                                <a ng-click="toggleAlbums(albums3,$index)">{{x.name}}</a>
+                                                <div ng-show="x.pic">
+                                                    <img src="{{x.photos.data[0].picture}}" style="width:250px;heigth:250px">
+                                                    <img src="{{x.photos.data[1].picture}}" style="width:250px;heigth:250px">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning" ng-show="albums3.length==0 || !albums3" >
+                                                <p>No data found.</p>  
+                                            </div>
+                                           </div>
+                                            
+                                        </div>
+
+                                        <div class=" well well-sm col-md-5" style="background-color:white">
+                                            <div class="well well-sm" id ="pst3">
+                                            <p> Posts </p>
+                                            </div>
+                                                <div class="progress" id="progressright3">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                            <div id="placeContent2">
+                                            <div class="well" style="background-color:white" ng-repeat="y in posts3">
+                                                <div><img class="responsive" src="{{all3.picture.data.url}}" style="width:40px;heigth:40px;float:left"></div>
+                                                <div style="font-size:12px; font-weight:bold;">{{all3.name}}</div>
+                                                <div style="font-size:10px;">{{y.created_time | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                                                <p>{{y.message}}</p>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning" ng-show="posts3.length==0 || !posts3">
+                                                <p>No data found.</p>
+                                            </div>
+                                            </div>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                
+        
+        
+                    
+<!--group section 4-->
+    <div class="tab-pane" id="group" >
+        <div id="myCarousel4" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div  class="carousel-inner" role="listbox">
+                <div class="item active">  
+                        <table class="table table-hover col-md-12 table-borderless">
+                             <tr>
+                                <th class="col-md-1">#</th>
+                                <th class="col-md-2">Profile Photo</th>
+                                <th class="col-md-4">Name</th>
+                                <th class="col-md-2">Favorite</th>
+                                <th class="col-md-1">Details</th>
+
+                            </tr>
+                            <tr role="tabpanel" class="tab-pane" ng-repeat="x in rows4 track by $index" ng-show="x.picture.data.url">
+                                <td>{{$index + 1}}</td>
+                                <td><a href="{{x.picture.data.url}}"><img class="img-circle" style="length:40px; width:40px" src="{{x.picture.data.url}}"></a></td>
+                                <td>{{x.name}}</td>
+                                
+                                <td><button class="btn btn-default" type="submit" ng-click="change(x,'group')">
+                                    <span class="glyphicon glyphicon-star" ng-show="x.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!x.favorite"></span>
+                                    </button>
+                                </td>
+                                <td class="slide" ng-click="group_details(x)">
+                                    <button class="btn btn-default" data-target="#myCarousel4" data-slide-to="1">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                                    <br>
+                                    <br>
+                                    <br>
+                                <div class="container" style="text-align:center">
+                                    <a class="btn btn-default center" type="submit" ng-click="groups_prev()" ng-show="use4.paging.previous">Previous</a>
+                                    <a class="btn btn-default center" type="submit"ng-click="groups_next()" ng-show="use4.paging.next" >Next</a>
+                                    <br>
+                                    <br>
+                                    <br>
+                                </div>
+                        </div>
+                
+                        <div class="item">
+                              <div class="nav navbar">
+                                    <a class="btn btn-default pull-left" type="submit" data-target="#myCarousel4" data-slide-to="0"  >Previous</a>
+                                    <a class="btn btn-default pull-right" type="submit" ng-click="postStory(all4)"><img src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png" style="width:20px;height:20px"></a>
+
+                                    <button class="btn btn-default pull-right" type="submit" ng-click="change(all4,'group') ">
+                                    <span class="glyphicon glyphicon-star" ng-show="all4.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!all4.favorite"></span>
+                                    </button>
+                                </div>
+
+                                    <div class="container" role="details">
+                                        <div class="well well-sm col-md-5" style="margin-right:5%; background-color:white" >
+                                            <div div class="well well-sm" id="abl4" >
+                                                <p> Albums </p>
+                                            </div> 
+                                            <div class="progress" id="progressleft4">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                        <div id="groupContent1">
+                                            <div class="well well-sm" ng-repeat="x in albums4 track by $index" >
+                                                <a ng-click="toggleAlbums(albums4,$index)">{{x.name}}</a>
+                                                <div ng-show="x.pic">
+                                                    <img src="{{x.photos.data[0].picture}}" style="width:250px;heigth:250px">
+                                                    <img src="{{x.photos.data[1].picture}}" style="width:250px;heigth:250px">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning" ng-show="albums4.length==0 || !albums4" >
+                                                <p>No data found.</p>  
+                                            </div>
+                                           </div>
+                                            
+                                        </div>
+
+                                        <div class=" well well-sm col-md-5" style="background-color:white">
+                                            <div class="well well-sm" id ="pst4">
+                                            <p> Posts </p>
+                                            </div>
+                                                <div class="progress" id="progressright4">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                            <div id="groupContent2">
+                                            <div class="well" style="background-color:white" ng-repeat="y in posts4">
+                                                <div><img class="responsive" src="{{all4.picture.data.url}}" style="width:40px;heigth:40px;float:left"></div>
+                                                <div style="font-size:12px; font-weight:bold;">{{all4.name}}</div>
+                                                <div style="font-size:10px;">{{y.created_time | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                                                <p>{{y.message}}</p>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning" ng-show="posts4.length==0 || !posts4">
+                                                <p>No data found.</p>
+                                            </div>
+                                            </div>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                       
+                
+                            
+    <div class="tab-pane" id="favorite" >
+        <div id="myCarousel5" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div  class="carousel-inner" role="listbox">
+                <div class="item active">  
+                        <table class="table table-hover col-md-12 table-borderless">
+                             <tr>
+                                <th class="col-md-1">#</th>
+                                <th class="col-md-2">Profile Photo</th>
+                                <th class="col-md-4">Name</th>
+                                 <th class="col-md-1">Type</th>
+                                <th class="col-md-1">Favorite</th>
+                                <th class="col-md-1">Details</th>
+
+                            </tr>
+                            <tr role="tabpanel" class="tab-pane" ng-repeat="x in favolist track by $index" ng-show="x.picture.data.url">
+                                <td>{{$index + 1}}</td>
+                                
+                                <td><a href="{{x.picture.data.url}}"><img class="img-circle" style="length:40px; width:40px" src="{{x.picture.data.url}}"></a>
+                                </td>
+                                
+                                <td>{{x.name}}</td>
+                                <td>{{x.type}}</td>
+                                <td><button class="btn btn-default" type="submit" ng-click="change(x, x.type)">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </td>
+                                <td class="slide" ng-click="favorites_details(x)">
+                                    <button class="btn btn-default" data-target="#myCarousel5" data-slide-to="1">
+                                        <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                                    <br>
+                                    <br>
+                                    <br>
+                        </div>
+                
+                        <div class="item">
+                              <div class="nav navbar">
+                                    <a class="btn btn-default pull-left" type="submit" data-target="#myCarousel5" data-slide-to="0"  >Previous</a>
+                                    <a class="btn btn-default pull-right" type="submit" ng-click="postStory(all5)"><img src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png" style="width:20px;height:20px"></a>
+
+                                    <button class="btn btn-default pull-right" type="submit" ng-click="change(all5,x.type) ">
+                                    <span class="glyphicon glyphicon-star" ng-show="all5.favorite"></span>
+                                    <span class="glyphicon glyphicon-star-empty" ng-show="!all5.favorite"></span>
+                                    </button>
+                                </div>
+
+                                    <div class="container" role="details">
+                                        <div class="well well-sm col-md-5" style="margin-right:5%; background-color:white" >
+                                            <div div class="well well-sm" id="abl5" >
+                                                <p> Albums </p>
+                                            </div> 
+                                            <div class="progress" id="progressleft5">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                        <div id="favoriteContent1">
+                                            <div class="well well-sm" ng-repeat="x in albums5 track by $index" >
+                                                <a ng-click="toggleAlbums(albums5,$index)">{{x.name}}</a>
+                                                <div ng-show="x.pic">
+                                                    <img src="{{x.photos.data[0].picture}}" style="width:250px;heigth:250px">
+                                                    <img src="{{x.photos.data[1].picture}}" style="width:250px;heigth:250px">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning" ng-show="albums5.length==0 || !albums5" >
+                                                <p>No data found.</p>  
+                                            </div>
+                                           </div>
+                                            
+                                        </div>
+
+                                        <div class=" well well-sm col-md-5" style="background-color:white">
+                                            <div class="well well-sm" id ="pst4">
+                                            <p> Posts </p>
+                                            </div>
+                                                <div class="progress" id="progressright5">
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+                                                </div>
+                                            <div id="favoriteContent2">
+                                            <div class="well" style="background-color:white" ng-repeat="y in posts5">
+                                                <div><img class="responsive" src="{{all5.picture.data.url}}" style="width:40px;heigth:40px;float:left"></div>
+                                                <div style="font-size:12px; font-weight:bold;">{{all5.name}}</div>
+                                                <div style="font-size:10px;">{{y.created_time | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                                                <p>{{y.message}}</p>
+                                            </div>
+                                            
+                                            <div class="alert alert-warning" ng-show="posts5.length==0 || !posts5">
+                                                <p>No data found.</p>
+                                            </div>
+                                            </div>
+                                        </div>   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                            </div>
+                        </div>
+                    </div>
+<!--
+                            
+-->
+           
+<!--
+            <div class="progress" id="progressleft">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%;"></div>
+            </div>
+            
+             <div class="progress" id="progressright">
+                <div class="progress-bar progress-bar-striped active " role="progressbar" style="width:50%;"></div>
+            </div>
+-->
+ 
+            
+            
+            
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            
+            <div class="progress" id="progressBar">
+                <div class="progress-bar progress-bar-striped active " role="progressbar" style="width:50%;"></div>
+            </div>
+            
+
+            
+        
+        <script src="index.js"></script>
+        
+    </body>
+</html>
+        
+        

@@ -1,0 +1,116 @@
+
+/*
+                .selector-for-some-widget {
+                  -webkit-box-sizing: content-box;
+                     -moz-box-sizing: content-box;
+                          box-sizing: content-box;
+                    
+                }
+*/
+                    
+               a.col-md-2{
+                   
+                    color: black;
+                    background-color: white;
+                    
+                }
+                
+                li a.col-md-2.btn-primary:hover{
+                    background-color: rgb(51,122,183);
+                    color: white;
+                    
+                }
+                
+                li a.col-md-2.btn-primary:focus{
+                        background-color: rgb(51,122,183);
+                        color: white;
+                    
+                }
+                #myTabs li.active a{
+                        background-color: rgb(51,122,183);
+                        color: white;
+                }
+                #clean {
+                  border-radius: 0px !important;
+                    border-color: rgb(51,122,183);
+                    color: rgb(51,122,183);
+                }
+                
+                
+
+                .btn:focus {
+                  outline: none;
+                }
+                
+                hr {
+                    
+                        border: solid 1px rgb(51,122,183) !important;
+                        margin-top: 0px;
+                        
+                    }
+                
+                
+                #user :focus{
+                    background-color: black;
+                }
+                
+                .glyphicon.glyphicon-star {
+                   color: rgb(239,212,0);
+                  
+                }
+                
+                
+                .table-borderless tbody tr th {
+                    border: none;
+                }
+                
+                 #progressBar{
+                    width: 60%;
+                    margin-left: 20%;
+    
+                }
+
+                #progressleft,#progressleft,#progressleft2,#progressleft3,#progressleft4,#progressleft5 {
+                    width: 80%;
+                    position: absolute;
+                    left: 5%;
+                    top: 60%;
+                    
+                }
+
+                
+                #progressright,#progressright1,#progressright2,#progressright3,#progressright4,#progressright5 {
+                    width: 80%;
+                    position: absolute;
+                    right:  15%;
+                    top: 60%;
+                    
+                }
+
+                
+                .well .well-sm{
+                    position: relative;
+                    left: 0px;
+                    right: 0px;
+                    margin-bottom: 2px;
+                    
+                    
+                }
+                
+                #abl, #abl1, #abl2, #abl3, #abl4, #abl5 {
+                    margin-top: -10px;
+                    margin-bottom: 10px;
+                    margin-left: -10px;
+                    margin-right: -10px;
+                }
+
+                            
+                
+                #pst,#pst1,#pst2,#pst3,#pst4,#pst5{
+                    margin-top: -10px;
+                    margin-bottom: 10px;
+                    margin-left: -10px;
+                    margin-right: -10px;
+                    
+                }
+                      
